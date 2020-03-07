@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>Create closures in loops</title>
+        <script>
+            window.onload = function() {
+                var elm = document.getElementsByTagName("input");
+                // ▼ 모든 버튼을 눌러도 3이 나오는 코드
+                // (Code that appears even after pressing all buttons.)
+                //
+                // for (var i = 0; i < elm.length; i++) {
+                //     elm[i].onclick = function() {
+                //         console.log(i);
+                //     };
+                // }
+
+                // Solution 1
+                // for (var i = 0; i < elm.length; i++)
+                //     (function(_i) {
+                //         elm[_i].onclick = function() {
+                //             console.log(_i);
+                //         };
+                //     })(i);
+
+                // Solution 2
+                for (let i = 0; i < elm.length; i++) {
+                    elm[i].onclick = function() {
+                        console.log(i);
+                    };
+                }
+            };
+        </script>
+    </head>
+    <body>
+        <!--
+          0을 누르면 0이 나와야하고, 1을 누르면 1이 출력되어야 하는데 왜 3만 출력되는 걸까요?
+          (If you press 0, you should get 0. If you press 1, you should get 1. Why is there only 3 outputs?)
+
+          onclick 이벤트 처리기로 등록한 함수 세 개가 바깥에 있는 변수 i를 참조하는 클로저가 되었기 때문입니다.
+          (This is because the three functions registered as onclick event handlers become closures that reference the outer variable i.)
+
+          onclick 이벤트 처리기가 실행되는 시점에는 for 문의 실행이 끝나 있습니다. 따라서 클로저가 공유하는 변수 i 값이 3인 상태입니다.
+          (When the onclick event handler runs, the for statement finishes running. Thus, the value of variable i shared by the closure is 3.)
+        -->
+        <input type="button" value="0" />
+        <input type="button" value="1" />
+        <input type="button" value="2" />
+    </body>
+</html>
